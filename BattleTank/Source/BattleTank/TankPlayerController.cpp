@@ -12,7 +12,7 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto ControlledTank = GetControlledTank();
+	ControlledTank = GetControlledTank();
 
 	if(ControlledTank)
 	{
@@ -25,4 +25,65 @@ void ATankPlayerController::BeginPlay()
 
 	
 }
+
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	AimTowardsCrosshair();
+}
+
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (!ControlledTank)
+	{
+		return;
+	}
+	
+	FVector HitLocation;
+	if (GetSightRayHitLocation(HitLocation))
+	{	
+		ControlledTank->AimAt(HitLocation);
+	}
+}
+
+
+
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
+{
+	FVector LookPosition, LookDirection;
+	OutHitLocation = FVector(0.0f);
+
+	if (!GetLookDirectionAndPosition(LookDirection, LookPosition))
+	{
+		return false;
+	}
+
+	FHitResult HitResult;
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, LookPosition, LookPosition + LookDirection*LineTraceRange, ECC_Visibility))
+	{
+		OutHitLocation = HitResult.Location;
+		//UE_LOG(LogTemp, Warning, TEXT("Object: %s, is hit at: %s"), *HitResult.Actor->GetName(), *HitResult.ImpactPoint.ToString());
+		return true;
+	}
+
+	return false;
+}
+
+
+bool ATankPlayerController::GetLookDirectionAndPosition(FVector& LookDirection, FVector& LookPosition) const
+{
+	auto ScreenLocation = GetCrossHairSceenLoaction();
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, LookPosition, LookDirection);
+}
+
+FVector2D ATankPlayerController::GetCrossHairSceenLoaction() const
+{
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	return FVector2D(ViewportSizeX*CrossHairXLocation, ViewportSizeY*CrossHairYLocation);
+}
+
+
 
