@@ -1,10 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-#include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h"
-#include "TankBarrel.h"
 #include "Tank.h"
-
 
 // Sets default values
 ATank::ATank()

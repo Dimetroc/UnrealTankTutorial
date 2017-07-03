@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
+#include "TankBarrel.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
-
-class UTankBarrel;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
