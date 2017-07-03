@@ -5,10 +5,12 @@
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
+class UTankTurret;
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
@@ -19,6 +21,7 @@ public:
 	UTankAimingComponent();
 
 	void SetBarrelReference(UTankBarrel*);
+	void SetTurretReference(UTankTurret*);
 
 	void AimAt(FVector, float);
 	// Called every frame
@@ -27,6 +30,8 @@ public:
 private:	
 	
 	UTankBarrel* Barrel = nullptr;
+	UTankTurret* Turret = nullptr;
 		
 	void MoveBarrelTowerds(FVector);
+	void MoveTurretTowerds(FVector);
 };

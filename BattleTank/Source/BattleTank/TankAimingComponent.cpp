@@ -19,6 +19,11 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	Turret = TurretToSet;
+}
+
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -38,9 +43,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		//UE_LOG(LogTemp, Warning, TEXT("Tank: %s, aiming at: %s"), *(GetOwner()->GetName()), *AimDirection.ToString());
 		MoveBarrelTowerds(AimDirection);
+		MoveTurretTowerds(AimDirection);
 	}else
 	{
 		MoveBarrelTowerds(FVector(0.0f));
+		MoveTurretTowerds(FVector(0.0f));
 	}
 }
 
@@ -52,3 +59,14 @@ void UTankAimingComponent::MoveBarrelTowerds(FVector AimDirection)
 
 	Barrel->Elevate(DeltaRotator.Pitch);
 }
+
+void UTankAimingComponent::MoveTurretTowerds(FVector AimDirection)
+{
+	auto BarrelRotation = Turret->GetForwardVector().Rotation();
+	auto AimAtRotation = AimDirection.Rotation();
+	auto DeltaRotator = AimAtRotation - BarrelRotation;
+
+	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+
