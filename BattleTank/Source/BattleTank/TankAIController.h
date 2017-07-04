@@ -22,10 +22,6 @@ private:
 	ATank* ControlledTank = nullptr;
 	ATank* PlayerTank = nullptr;
 
-	ATank* GetControlledTank() const;
-
-	ATank* GetPlayerTank() const;
-
 	void AimTowardsPlayer() const;
 		
 };

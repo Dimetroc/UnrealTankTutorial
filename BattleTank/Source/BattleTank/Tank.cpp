@@ -39,13 +39,18 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::Fire()
 {
+
+	if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds)
+	{
+		return;
+	}
 	if(!TankBarrel){ return; }
 
 	auto Location = TankBarrel->GetSocketLocation(FName("Projectile"));
 	auto Rotation = TankBarrel->GetSocketRotation(FName("Projectile"));
 
 	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
-
+	LastFireTime = FPlatformTime::Seconds();
 	Projectile->LaunchProjectile(LaunchSpeed);
 }
 

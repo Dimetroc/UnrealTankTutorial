@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Projectile.h"
+#include <string>
 
 
 // Sets default values
@@ -10,6 +11,7 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("MovementComponent"));
 	ProjectileMovement->bAutoActivate = false;
+	ProjectileMovement->bShouldBounce = true;
 }
 
 // Called when the game starts or when spawned
@@ -28,7 +30,7 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::LaunchProjectile(float Speed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Shot!"));
+	//UE_LOG(LogTemp, Warning, TEXT("Shot! Speed: %s"), Speed);
 
 	ProjectileMovement->SetVelocityInLocalSpace(FVector::ForwardVector*Speed);
 	ProjectileMovement->Activate();
