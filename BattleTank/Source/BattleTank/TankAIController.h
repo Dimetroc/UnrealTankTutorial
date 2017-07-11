@@ -24,4 +24,5 @@ private:
 
 	void AimTowardsPlayer() const;
 		
+	float AcceptanceRadius = 3000.0f;
 };

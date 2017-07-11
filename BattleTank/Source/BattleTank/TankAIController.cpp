@@ -1,12 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TankAIController.h"
 
-void ATankAIController::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	AimTowardsPlayer();
-}
-
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -23,7 +17,7 @@ void ATankAIController::BeginPlay()
 	}
 
 	PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if(!PlayerTank)
+	if (!PlayerTank)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Can't find player tank"));
 	}
@@ -32,8 +26,20 @@ void ATankAIController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Player tank is %s"), *(PlayerTank->GetName()));
 	}
 
-
 }
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+	if (PlayerTank)
+	{
+		MoveToActor(PlayerTank, AcceptanceRadius);
+		AimTowardsPlayer();
+	}
+}
+
+
 
 void ATankAIController::AimTowardsPlayer() const
 {
