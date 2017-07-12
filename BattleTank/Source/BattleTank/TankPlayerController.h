@@ -13,6 +13,10 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank* GetControlledTank() const;
+
 private:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -23,8 +27,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000.0f;
-
-	ATank* GetControlledTank() const;
 
 	ATank* ControlledTank = nullptr;
 
