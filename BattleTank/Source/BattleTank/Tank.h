@@ -26,10 +26,7 @@ public:
 	void AimAt(FVector HitLocation) const;
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetTurretReference(UTankTurret* TurretToSet) const;
+	void Initialise(UTankBarrel* BarrelToSet, UTankAimingComponent* AimingComponentToset);
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
@@ -37,8 +34,7 @@ public:
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	UTankAimingComponent* TankAimingComponent = nullptr;
-	UPROPERTY(BlueprintReadOnly)
-	UTankMovementComponent* TankMovementComponent = nullptr;
+
 
 private:	
 	// Called when the game starts or when spawned

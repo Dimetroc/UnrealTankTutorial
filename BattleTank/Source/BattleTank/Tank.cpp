@@ -4,7 +4,7 @@
 // Sets default values
 ATank::ATank()
 {
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("AimingComponent"));
+	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("AimingComponent"));
 	//TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("MovementComponent"));
 }
 
@@ -18,18 +18,17 @@ void ATank::BeginPlay()
 
 void ATank::AimAt(FVector HitLocation) const
 {
+	if (!TankAimingComponent)
+	{
+		return;
+	}
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
-void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
+void ATank::Initialise(UTankBarrel * BarrelToSet, UTankAimingComponent* AimingComponentToSet)
 {
-	TankAimingComponent->SetBarrelReference(BarrelToSet);
 	TankBarrel = BarrelToSet;
-}
-
-void ATank::SetTurretReference(UTankTurret* TurretToSet) const
-{
-	TankAimingComponent->SetTurretReference(TurretToSet);
+	TankAimingComponent = AimingComponentToSet;
 }
 
 // Called to bind functionality to input
