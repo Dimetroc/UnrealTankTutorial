@@ -18,7 +18,7 @@ void ATank::BeginPlay()
 
 void ATank::AimAt(FVector HitLocation) const
 {
-	if (!TankAimingComponent)
+	if (!ensure(TankAimingComponent))
 	{
 		return;
 	}

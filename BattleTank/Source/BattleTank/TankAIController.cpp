@@ -32,7 +32,7 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (PlayerTank)
+	if (ensure(PlayerTank))
 	{
 		MoveToActor(PlayerTank, AcceptanceRadius);
 		AimTowardsPlayer();
@@ -43,8 +43,8 @@ void ATankAIController::Tick(float DeltaTime)
 
 void ATankAIController::AimTowardsPlayer() const
 {
-	if(!ControlledTank){return; }
-	if(!PlayerTank){return; }
+	if(!ensure(ControlledTank)){return; }
+	if(!ensure(PlayerTank)){return; }
 	ControlledTank->AimAt(PlayerTank->GetActorLocation());
 	ControlledTank->Fire();
 }

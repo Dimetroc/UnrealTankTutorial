@@ -24,7 +24,15 @@ void ATankPlayerController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("Tank pawn not found!"));
 	}
 
-	
+	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	if (AimingComponent)
+	{
+		FoundAimingComponent(AimingComponent);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Aiming component not found!"));
+	}
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -36,10 +44,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!ControlledTank)
-	{
-		return;
-	}
+	if (!ensure(ControlledTank)){ return;}
 	
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
