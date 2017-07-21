@@ -22,7 +22,7 @@ void ATank::AimAt(FVector HitLocation) const
 	{
 		return;
 	}
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	TankAimingComponent->AimAt(HitLocation);
 }
 
 void ATank::Initialise(UTankBarrel * BarrelToSet, UTankAimingComponent* AimingComponentToSet)

@@ -32,7 +32,7 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
-	void AimAt(FVector, float);
+	void AimAt(FVector);
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -42,6 +42,9 @@ protected:
 
 
 private:
+
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	float LaunchSpeed = 100000;
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
