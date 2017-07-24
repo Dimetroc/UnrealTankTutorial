@@ -25,7 +25,18 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds)
+	{
+		FiringState = EFiringStatus::Reloading;
+	}
+	else if(IsBarrelMoving())
+	{
+		FiringState = EFiringStatus::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringStatus::Locked;
+	}
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -36,7 +47,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 	if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation, HitLocation, LaunchSpeed, false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		//UE_LOG(LogTemp, Warning, TEXT("Tank: %s, aiming at: %s"), *(GetOwner()->GetName()), *AimDirection.ToString());
 		MoveBarrelTowerds(AimDirection);
 		MoveTurretTowerds(AimDirection);
@@ -45,6 +56,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 		MoveBarrelTowerds(FVector(0.0f));
 		MoveTurretTowerds(FVector(0.0f));
 	}
+}
+
+void UTankAimingComponent::BeginPlay()
+{
+	LastFireTime = FPlatformTime::Seconds();
 }
 
 void UTankAimingComponent::MoveBarrelTowerds(FVector AimDirection)
@@ -65,24 +81,32 @@ void UTankAimingComponent::MoveTurretTowerds(FVector AimDirection)
 	Turret->Rotate(DeltaRotator.Yaw);
 }
 
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel))
+	{
+		return false;
+	}
+	auto BarrelRotation = Barrel->GetForwardVector();
+	return !BarrelRotation.Equals(AimDirection, 0.001f);
+}
+
 void UTankAimingComponent::Fire()
 {
-
-	if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds)
+	if (FiringState != EFiringStatus::Reloading)
 	{
-		return;
-	}
-	if (!ensure(Barrel && ProjectileBlueprint))
-	{
-		return;
-	}
+		if (!ensure(Barrel && ProjectileBlueprint))
+		{
+			return;
+		}
 
-	auto Location = Barrel->GetSocketLocation(FName("Projectile"));
-	auto Rotation = Barrel->GetSocketRotation(FName("Projectile"));
+		auto Location = Barrel->GetSocketLocation(FName("Projectile"));
+		auto Rotation = Barrel->GetSocketRotation(FName("Projectile"));
 
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
-	LastFireTime = FPlatformTime::Seconds();
-	Projectile->LaunchProjectile(LaunchSpeed);
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
+		LastFireTime = FPlatformTime::Seconds();
+		Projectile->LaunchProjectile(LaunchSpeed);
+	}
 }
 
 

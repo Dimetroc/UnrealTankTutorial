@@ -37,6 +37,8 @@ public:
 
 	void AimAt(FVector);
 
+	virtual void BeginPlay() override;
+
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
@@ -61,4 +63,8 @@ private:
 
 	void MoveBarrelTowerds(FVector);
 	void MoveTurretTowerds(FVector);
+
+	bool IsBarrelMoving();
+
+	FVector AimDirection;
 };
