@@ -6,7 +6,6 @@
 #include "AIController.h"
 #include "Engine/World.h"
 #include "TankAimingComponent.h"
-#include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankAIController.generated.h"
 
@@ -23,7 +22,6 @@ private:
 
 	virtual void BeginPlay() override;
 
-	ATank* ControlledTank = nullptr;
 	APawn* PlayerTank = nullptr;
 
 	void AimTowardsPlayer() const;

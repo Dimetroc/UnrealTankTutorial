@@ -5,17 +5,6 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ControlledTank = Cast<ATank>(GetPawn());
-
-	if (ControlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AI tank %s"), *(ControlledTank->GetName()));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AI Tank pawn not found!"));
-	}
-
 	PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 }
@@ -28,7 +17,7 @@ void ATankAIController::Tick(float DeltaTime)
 	{
 		MoveToActor(PlayerTank, AcceptanceRadius);
 		AimTowardsPlayer();
-		ControlledTank->Fire();
+		AimingComponent->Fire();
 	}
 }
 

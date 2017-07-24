@@ -5,9 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Engine/World.h"
-#include "TankBarrel.h"
-#include "TankTurret.h"
-#include "Projectile.h"
 #include "Tank.generated.h"
 
 UCLASS()
@@ -19,29 +16,7 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void Initialise(UTankBarrel* BarrelToSet);
-
-	UFUNCTION(BlueprintCallable, Category = Firing)
-	void Fire();
-
 private:	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float LaunchSpeed = 100000;
-
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
-	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
-
-	UTankBarrel* TankBarrel = nullptr;
-	
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-	float ReloadTimeInSeconds = 3.0f;
-
-	double LastFireTime = -3;
 };
