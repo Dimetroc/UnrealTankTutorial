@@ -12,23 +12,12 @@ ATank::ATank()
 // Called when the game starts or when spawned
 void ATank::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
-void ATank::AimAt(FVector HitLocation) const
-{
-	if (!ensure(TankAimingComponent))
-	{
-		return;
-	}
-	TankAimingComponent->AimAt(HitLocation);
-}
-
-void ATank::Initialise(UTankBarrel * BarrelToSet, UTankAimingComponent* AimingComponentToSet)
+void ATank::Initialise(UTankBarrel * BarrelToSet)
 {
 	TankBarrel = BarrelToSet;
-	TankAimingComponent = AimingComponentToSet;
 }
 
 // Called to bind functionality to input

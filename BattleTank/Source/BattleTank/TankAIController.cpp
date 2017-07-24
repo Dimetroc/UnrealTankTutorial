@@ -16,16 +16,8 @@ void ATankAIController::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("AI Tank pawn not found!"));
 	}
 
-	PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (!PlayerTank)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Can't find player tank"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player tank is %s"), *(PlayerTank->GetName()));
-	}
-
+	PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 }
 
 void ATankAIController::Tick(float DeltaTime)
@@ -36,16 +28,14 @@ void ATankAIController::Tick(float DeltaTime)
 	{
 		MoveToActor(PlayerTank, AcceptanceRadius);
 		AimTowardsPlayer();
+		ControlledTank->Fire();
 	}
 }
 
-
-
 void ATankAIController::AimTowardsPlayer() const
 {
-	if(!ensure(ControlledTank)){return; }
+	if(!ensure(AimingComponent)){return; }
 	if(!ensure(PlayerTank)){return; }
-	ControlledTank->AimAt(PlayerTank->GetActorLocation());
-	ControlledTank->Fire();
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 }
 

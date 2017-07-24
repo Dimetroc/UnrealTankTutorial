@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Engine/World.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankAIController.generated.h"
@@ -15,12 +16,15 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 	
 private:
+
+	UTankAimingComponent* AimingComponent = nullptr;
+
 	virtual void Tick(float) override;
 
 	virtual void BeginPlay() override;
 
 	ATank* ControlledTank = nullptr;
-	ATank* PlayerTank = nullptr;
+	APawn* PlayerTank = nullptr;
 
 	void AimTowardsPlayer() const;
 		

@@ -4,14 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h"
 #include "Engine/World.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
 #include "Tank.generated.h"
-
-
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -22,17 +19,11 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void AimAt(FVector HitLocation) const;
-
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void Initialise(UTankBarrel* BarrelToSet, UTankAimingComponent* AimingComponentToset);
+	void Initialise(UTankBarrel* BarrelToSet);
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
-
-protected:
-	UPROPERTY(BlueprintReadOnly)
-	UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:	
 	// Called when the game starts or when spawned

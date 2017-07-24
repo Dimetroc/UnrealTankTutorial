@@ -1,37 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "TankPlayerController.h"
 
-
-
-
-ATank* ATankPlayerController::GetControlledTank()const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ControlledTank = GetControlledTank();
-
-	if(ControlledTank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank pawn %s found"), *(ControlledTank->GetName()));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank pawn not found!"));
-	}
-
-	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
-	if (AimingComponent)
+	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (ensure(AimingComponent))
 	{
 		FoundAimingComponent(AimingComponent);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Aiming component not found!"));
 	}
 }
 
@@ -44,16 +21,14 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!ensure(ControlledTank)){ return;}
+	if (!ensure(AimingComponent)){ return;}
 	
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{	
-		ControlledTank->AimAt(HitLocation);
+		AimingComponent->AimAt(HitLocation);
 	}
 }
-
-
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
@@ -76,7 +51,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 
 	return false;
 }
-
 
 bool ATankPlayerController::GetLookDirectionAndPosition(FVector& LookDirection, FVector& LookPosition) const
 {
