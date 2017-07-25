@@ -4,25 +4,54 @@
 
 UTankTrack::UTankTrack()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+
 }
 
-void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+void UTankTrack::BeginPlay()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	PrimaryComponentTick.bCanEverTick = true;
+	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
+}
 
+void UTankTrack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	if (WasHitLastFrame)
+	{
+		ApplySidewaysForce();
+		DriveTrack();
+		CurrentThrottle = 0.0f;
+		WasHitLastFrame = false;
+	}
+}
+
+void UTankTrack::ApplySidewaysForce()
+{
 	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
-	auto CorrectionAcceleration = - SlippageSpeed / DeltaTime * GetRightVector();
+	auto DeltaTime = GetWorld()->GetDeltaSeconds();
+	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector();
 	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
 	auto CorrectionForce = (TankRoot->GetMass()*CorrectionAcceleration) / 2.0f;
-
 	TankRoot->AddForce(CorrectionForce);
+}
+
+void UTankTrack::DriveTrack()
+{
+	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
+	auto ForceLocation = GetComponentLocation();
+	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
+	//UE_LOG(LogTemp, Warning, TEXT("Tank: %s, DriveTrack: %s, throttle: %s"), *(GetOwner()->GetName()), *(GetName()), *ForceApplied.ToString());
+	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+}
+
+void UTankTrack::OnHit(UPrimitiveComponent * Hitcomponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Tank: %s, hit"), *(GetOwner()->GetName()));
+	
+	WasHitLastFrame = true;
 }
 
 void UTankTrack::SetThrottle(float ThrottleValue)
 {
-	auto ForceApplied = GetForwardVector() * ThrottleValue * TrackMaxDrivingForce;
-	auto ForceLocation = GetComponentLocation();
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+	//UE_LOG(LogTemp, Warning, TEXT("Tank: %s, Track: %s, throttle: %s"), *(GetOwner()->GetName()), *(GetName()), *FString::SanitizeFloat(ThrottleValue));
+	CurrentThrottle = FMath::Clamp<float>(ThrottleValue, -1.0f, 1.0f);
 }
