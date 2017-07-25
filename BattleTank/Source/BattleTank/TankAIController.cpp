@@ -13,11 +13,14 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (ensure(PlayerTank))
+	if (ensure(PlayerTank) && ensure(AimingComponent))
 	{
 		MoveToActor(PlayerTank, AcceptanceRadius);
 		AimTowardsPlayer();
-		AimingComponent->Fire();
+		if (AimingComponent->GetFiringState() == EFiringStatus::Locked)
+		{
+			AimingComponent->Fire();
+		}
 	}
 }
 

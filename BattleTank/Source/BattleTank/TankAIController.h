@@ -26,5 +26,6 @@ private:
 
 	void AimTowardsPlayer() const;
 		
-	float AcceptanceRadius = 3000.0f;
+	//UPROPERTY(EditAnywhere, Category = "Movement")
+	float AcceptanceRadius = 7000.0f;
 };
