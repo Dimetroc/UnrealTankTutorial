@@ -48,8 +48,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringStatus FiringState = EFiringStatus::Reloading;
 
-	UPROPERTY(BlueprintReadOnly, Category = "State")
-	int AmmoLeft = 10;
+	UPROPERTY(EditDefaultsOnly, Category = "State")
+	int32 AmmoLeft = 10;
 
 private:
 
