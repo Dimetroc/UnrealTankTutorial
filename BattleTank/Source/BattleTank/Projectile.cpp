@@ -22,6 +22,7 @@ AProjectile::AProjectile()
 	ProjectileMovement->bShouldBounce = true;
 
 	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("ExplosionForce"));
+	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	
 }
 
@@ -35,6 +36,7 @@ void AProjectile::BeginPlay()
 void AProjectile::OnHit(UPrimitiveComponent * Hitcomponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit)
 {
 	HitExplosion->Activate();
+	ExplosionForce->FireImpulse();
 }
 
 // Called every frame
