@@ -37,6 +37,8 @@ void AProjectile::OnHit(UPrimitiveComponent * Hitcomponent, AActor * OtherActor,
 {
 	HitExplosion->Activate();
 	ExplosionForce->FireImpulse();
+
+	UGameplayStatics::ApplyRadialDamage(this, ProjectileDamage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(), TArray<AActor*>());
 }
 
 // Called every frame
