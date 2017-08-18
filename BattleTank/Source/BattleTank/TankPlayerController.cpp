@@ -42,7 +42,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 
 	FHitResult HitResult;
 
-	if (GetWorld()->LineTraceSingleByChannel(HitResult, LookPosition, LookPosition + LookDirection*LineTraceRange, ECC_Visibility))
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, LookPosition, LookPosition + LookDirection*LineTraceRange, ECollisionChannel::ECC_Camera))
 	{
 		OutHitLocation = HitResult.Location;
 		//UE_LOG(LogTemp, Warning, TEXT("Object: %s, is hit at: %s"), *HitResult.Actor->GetName(), *HitResult.ImpactPoint.ToString());
@@ -68,7 +68,7 @@ void ATankPlayerController::SetPawn(APawn * InPawn)
 
 void ATankPlayerController::OnTankDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Tank is dead!"));
+	StartSpectatingOnly();
 }
 
 bool ATankPlayerController::GetLookDirectionAndPosition(FVector& LookDirection, FVector& LookPosition) const
