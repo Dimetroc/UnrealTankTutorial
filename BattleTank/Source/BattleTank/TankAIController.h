@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Engine/World.h"
+#include "Tank.h"
 #include "TankAimingComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "TankAIController.generated.h"
@@ -13,6 +14,10 @@ UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float AcceptanceRadius = 7000.0f;
 	
 private:
 
@@ -25,7 +30,10 @@ private:
 	APawn* PlayerTank = nullptr;
 
 	void AimTowardsPlayer() const;
-		
-	//UPROPERTY(EditAnywhere, Category = "Movement")
-	float AcceptanceRadius = 7000.0f;
+
+	virtual void SetPawn(APawn*  InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
+
 };

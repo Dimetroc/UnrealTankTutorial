@@ -31,3 +31,19 @@ void ATankAIController::AimTowardsPlayer() const
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 }
 
+void ATankAIController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) {return;}
+		PossessedTank->TankDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
+	}
+}
+
+void ATankAIController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank is dead!")); 
+}
+

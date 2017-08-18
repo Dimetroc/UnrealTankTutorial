@@ -4,6 +4,7 @@
 
 
 #include "GameFramework/PlayerController.h"
+#include "Tank.h"
 #include "Engine/World.h"
 #include "TankAimingComponent.h"
 #include "TankPlayerController.generated.h"
@@ -38,4 +39,9 @@ private:
 	bool ATankPlayerController::GetLookDirectionAndPosition(FVector&, FVector&) const;
 	FVector2D GetCrossHairSceenLoaction() const;
 	bool GetSightRayHitLocation(FVector&) const;
+
+	virtual void SetPawn(APawn*  InPawn) override;
+
+	UFUNCTION()
+	void OnTankDeath();
 };

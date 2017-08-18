@@ -7,6 +7,8 @@
 #include "Engine/World.h"
 #include "Tank.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDeath);
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -20,6 +22,8 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 	float GetHealthPercent() const;
+
+	FTankDeath TankDeath;
 
 private:
 	// Called when the game starts or when spawned

@@ -52,6 +52,25 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	return false;
 }
 
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		ATank* PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank))
+		{
+			return;
+		}
+		PossessedTank->TankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+	}
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Tank is dead!"));
+}
+
 bool ATankPlayerController::GetLookDirectionAndPosition(FVector& LookDirection, FVector& LookPosition) const
 {
 	auto ScreenLocation = GetCrossHairSceenLoaction();
